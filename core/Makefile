@@ -794,10 +794,8 @@ $(TARGET_BOOTLOADER_IMAGE):
 		$(MAKE) -C bootable/bootloader/uboot-imx/ distclean $(BOOTLOADER_ENV); \
 		$(MAKE) -C bootable/bootloader/uboot-imx/ $$UBOOT_CONFIG $(BOOTLOADER_ENV); \
 		$(MAKE) -C bootable/bootloader/uboot-imx/ $(BOOTLOADER_ENV); \
-		install -D bootable/bootloader/uboot-imx/SPL $(PRODUCT_OUT)/SPL-$$UBOOT_PLATFORM.bin; \
-		install -D bootable/bootloader/uboot-imx/u-boot.img $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.img; \
-		install -D bootable/bootloader/uboot-imx/SPL $@; \
-		install -D bootable/bootloader/uboot-imx/u-boot.img $@; \
+		install -D bootable/bootloader/uboot-imx/SPL $(PRODUCT_OUT)/SPL; \
+		install -D bootable/bootloader/uboot-imx/u-boot.img $(PRODUCT_OUT)/u-boot.img; \
 	done
 else
 bootloader:
