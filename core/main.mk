@@ -589,6 +589,11 @@ ifdef FULL_BUILD
   # by the appropriate product definition file, which was included
   # by product_config.make.
   product_MODULES := $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_PACKAGES)
+  ifeq (0,1)
+    $(info product_MODULES for $(TARGET_DEVICE) ($(INTERNAL_PRODUCT)):)
+    $(foreach p,$(product_MODULES),$(info :   $(p)))
+    $(error done)
+  endif
   # Filter out the overridden packages before doing expansion
   product_MODULES := $(filter-out $(foreach p, $(product_MODULES), \
       $(PACKAGES.$(p).OVERRIDES)), $(product_MODULES))
