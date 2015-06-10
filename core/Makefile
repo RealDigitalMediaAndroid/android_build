@@ -1369,6 +1369,14 @@ endif
 ifdef BOARD_KERNEL_DTS
 	$(hide) echo "$(BOARD_KERNEL_DTS)" > $(zip_root)/BOOT/dtb
 endif
+	@# DTB files and U-Boot boot script
+	$(hide) mkdir -p $(zip_root)/BOOT_EXTRA
+	$(hide) for dtsplat in $(TARGET_BOARD_DTS_CONFIG); do \
+		DTS_PLATFORM=`echo $$dtsplat | cut -d':' -f1`; \
+		DTS_BOARD=`echo $$dtsplat | cut -d':' -f2`; \
+		$(ACP) "$(PRODUCT_OUT)/$$DTS_BOARD" $(zip_root)/BOOT_EXTRA; \
+		$(ACP) "$(BOOTSCRIPT_TARGET)" $(zip_root)/BOOT_EXTRA; \
+	done
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
 	            mkdir -p $(zip_root)/RADIO; \
 	            $(ACP) $(t) $(zip_root)/RADIO/$(notdir $(t));)
