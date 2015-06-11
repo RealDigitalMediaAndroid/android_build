@@ -487,7 +487,18 @@ ifneq ($(dont_bother),true)
 subdir_makefiles := \
 	$(shell build/tools/findleaves.py --prune=$(OUT_DIR) --prune=.repo --prune=.git $(subdirs) Android.mk)
 
-$(foreach mk, $(subdir_makefiles), $(info including $(mk) ...)$(eval include $(mk)))
+ifeq ($(strip $(SHOW_COMMANDS)),)
+    define count_includes
+	$(eval INCLUDE_COUNT := $(shell echo "$$(( $(INCLUDE_COUNT) + 1 ))" ) ) \
+	$(eval LAST_INCLUDE := $(1)) \
+	$(if $(patsubst %00,,$(INCLUDE_COUNT)),,$(info $(INCLUDE_COUNT): including $(1) ...) )
+    endef
+    $(foreach mk, $(subdir_makefiles), $(call count_includes, $(mk))$(eval include $(mk)))
+    $(if $(patsubst %00,$(INCLUDE_COUNT),),,\
+         $(info $(INCLUDE_COUNT): including  $(LAST_INCLUDE) ...))
+else
+    $(foreach mk, $(subdir_makefiles), $(info including $(mk) ...)$(eval include $(mk)))
+endif
 
 endif # dont_bother
 
