@@ -1379,6 +1379,10 @@ endif
 		$(ACP) "$(BOOTSCRIPT_TARGET)" $(zip_root)/BOOT_EXTRA/boot; \
 	done
 	@#$(hide)touch $(zip_root)/BOOT_EXTRA/boot/$(shell date +'%Y%d%m_%H%M%S')
+	@# Bootloader files u-boot.img and SPL
+	$(hide) mkdir -p $(zip_root)/BOOTLOADER
+	$(hide) $(ACP) "$(PRODUCT_OUT)/u-boot.img" $(zip_root)/BOOTLOADER
+	$(hide) $(ACP) "$(PRODUCT_OUT)/SPL" $(zip_root)/BOOTLOADER
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
 	            mkdir -p $(zip_root)/RADIO; \
 	            $(ACP) $(t) $(zip_root)/RADIO/$(notdir $(t));)
@@ -1456,7 +1460,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	@echo "Package OTA: $@"
-	$(hide) ./build/tools/releasetools/ota_from_target_files -v \
+	$(hide) ./build/tools/releasetools/ota_from_target_files -v -2 \
 			-p $(HOST_OUT) \
 			-k $(KEY_CERT_PAIR) \
 			$(BUILT_TARGET_FILES_PACKAGE) $@

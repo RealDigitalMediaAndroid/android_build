@@ -466,13 +466,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     bcb_dev = {"bcb_dev": fs.device}
     common.ZipWriteStr(output_zip, "recovery.img", recovery_img.data)
     script.AppendExtra("""
-if get_stage("%(bcb_dev)s", "stage") == "2/3" then
-""" % bcb_dev)
-    script.WriteRawImage("/recovery", "recovery.img")
-    script.AppendExtra("""
-set_stage("%(bcb_dev)s", "3/3");
-reboot_now("%(bcb_dev)s", "recovery");
-else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
+if get_stage("%(bcb_dev)s", "stage") == "2/2" then
 """ % bcb_dev)
 
   device_specific.FullOTA_InstallBegin()
@@ -520,11 +514,15 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
 set_stage("%(bcb_dev)s", "");
 """ % bcb_dev)
     script.AppendExtra("else\n")
-    script.WriteRawImage("/boot", "recovery.img")
+
+    script.Mount("/recovery")
+    script.UnpackPackageDir("BOOT_EXTRA", "/recovery")
+    script.AppendExtra('package_extract_file("recovery.img", "/recovery/recovery.img");')
+    script.UnmountAll();
+
     script.AppendExtra("""
-set_stage("%(bcb_dev)s", "2/3");
+set_stage("%(bcb_dev)s", "2/2");
 reboot_now("%(bcb_dev)s", "");
-endif;
 endif;
 """ % bcb_dev)
   script.AddToZip(input_zip, output_zip)
