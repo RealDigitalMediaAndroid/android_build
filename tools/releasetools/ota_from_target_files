@@ -471,7 +471,7 @@ if get_stage("%(bcb_dev)s", "stage") == "2/2" then
 
   device_specific.FullOTA_InstallBegin()
 
-  script.ShowProgress(0.5, 0)
+  script.ShowProgress(1.0, 70)
 
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
@@ -496,12 +496,8 @@ if get_stage("%(bcb_dev)s", "stage") == "2/2" then
 
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
-  script.ShowProgress(0.2, 0)
 
-  script.ShowProgress(0.2, 10)
-  #script.WriteRawImage("/boot", "boot.img")
-
-  script.ShowProgress(0.1, 0)
+  #  script.ShowProgress(1.0, 10)
   device_specific.FullOTA_InstallEnd()
 
   if OPTIONS.extra_script is not None:
@@ -515,6 +511,7 @@ set_stage("%(bcb_dev)s", "");
 """ % bcb_dev)
     script.AppendExtra("else\n")
 
+    script.ShowProgress(1.0, 5)
     script.FormatPartition("/recovery")
     script.Mount("/recovery")
     script.UnpackPackageDir("BOOT_EXTRA", "/recovery")
