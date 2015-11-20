@@ -515,6 +515,7 @@ set_stage("%(bcb_dev)s", "");
 """ % bcb_dev)
     script.AppendExtra("else\n")
 
+    script.FormatPartition("/recovery")
     script.Mount("/recovery")
     script.UnpackPackageDir("BOOT_EXTRA", "/recovery")
     script.AppendExtra('package_extract_file("recovery.img", "/recovery/recovery.img");')
