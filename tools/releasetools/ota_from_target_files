@@ -517,6 +517,11 @@ set_stage("%(bcb_dev)s", "");
     script.UnpackPackageDir("BOOT_EXTRA", "/recovery")
     script.AppendExtra('package_extract_file("recovery.img", "/recovery/recovery.img");')
     script.UnmountAll();
+    # UnmountAll doesn't work
+    script.AppendExtra('run_program("sync");')
+    script.AppendExtra('run_program("sync");')
+    script.AppendExtra('run_program("sleep", "2");')
+    script.AppendExtra('run_program("sync");')
 
     script.AppendExtra("""
 set_stage("%(bcb_dev)s", "2/2");
